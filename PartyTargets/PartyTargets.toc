@@ -1,0 +1,15 @@
+## Interface: 90200 #Fallback to the Mainline version
+## Title: Party Targets
+## Version: 1.0
+## X-Day: 18
+## X-Month: 3
+## X-Year: 2022
+## Author: Barnabas Nagy (Arxareon)
+## X-License: All Rights Reserved
+## Notes: See who your party and raid members are targeting.
+## SavedVariables: PartyTargetsDB, PartyTargetsCS
+## SavedVariablesPerCharacter: PartyTargetsDBC
+
+WidgetTools/WidgetTools.lua
+PartyTargetsLocalizations.lua
+PartyTargets.lua
