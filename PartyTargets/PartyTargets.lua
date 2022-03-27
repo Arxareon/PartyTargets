@@ -72,8 +72,166 @@ local cs --Cross-session account-wide data
 local dbDefault = {
 	display = {
 		position = {
-			point = "TOP",
-			offset = { x = 0, y = -120, },
+			[0] = {
+				point = "TOP",
+				offset = { x = -320, y = -120, },
+			},
+			[1] = {
+				point = "TOP",
+				offset = { x = -320, y = -140, },
+			},
+			[2] = {
+				point = "TOP",
+				offset = { x = -320, y = -160, },
+			},
+			[3] = {
+				point = "TOP",
+				offset = { x = -320, y = -180, },
+			},
+			[4] = {
+				point = "TOP",
+				offset = { x = -320, y = -200, },
+			},
+			[5] = {
+				point = "TOP",
+				offset = { x = -320, y = -220, },
+			},
+			[6] = {
+				point = "TOP",
+				offset = { x = -320, y = -240, },
+			},
+			[7] = {
+				point = "TOP",
+				offset = { x = -320, y = -260, },
+			},
+			[8] = {
+				point = "TOP",
+				offset = { x = -320, y = -280, },
+			},
+			[9] = {
+				point = "TOP",
+				offset = { x = -320, y = -300, },
+			},
+			[10] = {
+				point = "TOP",
+				offset = { x = -220, y = -120, },
+			},
+			[11] = {
+				point = "TOP",
+				offset = { x = -220, y = -140, },
+			},
+			[12] = {
+				point = "TOP",
+				offset = { x = -220, y = -160, },
+			},
+			[13] = {
+				point = "TOP",
+				offset = { x = -220, y = -180, },
+			},
+			[14] = {
+				point = "TOP",
+				offset = { x = -220, y = -200, },
+			},
+			[15] = {
+				point = "TOP",
+				offset = { x = -220, y = -220, },
+			},
+			[16] = {
+				point = "TOP",
+				offset = { x = -220, y = -240, },
+			},
+			[17] = {
+				point = "TOP",
+				offset = { x = -220, y = -260, },
+			},
+			[18] = {
+				point = "TOP",
+				offset = { x = -220, y = -280, },
+			},
+			[19] = {
+				point = "TOP",
+				offset = { x = -220, y = -300, },
+			},
+			[20] = {
+				point = "TOP",
+				offset = { x = -120, y = -120, },
+			},
+			[21] = {
+				point = "TOP",
+				offset = { x = -120, y = -140, },
+			},
+			[22] = {
+				point = "TOP",
+				offset = { x = -120, y = 160, },
+			},
+			[23] = {
+				point = "TOP",
+				offset = { x = -120, y = -180, },
+			},
+			[24] = {
+				point = "TOP",
+				offset = { x = -120, y = -200, },
+			},
+			[25] = {
+				point = "TOP",
+				offset = { x = -120, y = -220, },
+			},
+			[26] = {
+				point = "TOP",
+				offset = { x = -120, y = -240, },
+			},
+			[27] = {
+				point = "TOP",
+				offset = { x = -120, y = -260, },
+			},
+			[28] = {
+				point = "TOP",
+				offset = { x = -120, y = -280, },
+			},
+			[29] = {
+				point = "TOP",
+				offset = { x = -120, y = -300, },
+			},
+			[30] = {
+				point = "TOP",
+				offset = { x = -20, y = -120, },
+			},
+			[31] = {
+				point = "TOP",
+				offset = { x = -20, y = -140, },
+			},
+			[32] = {
+				point = "TOP",
+				offset = { x = -20, y = -160, },
+			},
+			[33] = {
+				point = "TOP",
+				offset = { x = -20, y = -180, },
+			},
+			[34] = {
+				point = "TOP",
+				offset = { x = -20, y = -200, },
+			},
+			[35] = {
+				point = "TOP",
+				offset = { x = -20, y = -220, },
+			},
+			[36] = {
+				point = "TOP",
+				offset = { x = -20, y = -240, },
+			},
+			[37] = {
+				point = "TOP",
+				offset = { x = -20, y = -260, },
+			},
+			[38] = {
+				point = "TOP",
+				offset = { x = -20, y = -280, },
+			},
+			[39] = {
+				point = "TOP",
+				offset = { x = -20, y = -300, },
+			},
 		},
 		text = {
 			font = {
@@ -104,64 +262,18 @@ local dbcDefault = {
 
 --[ Main Frame ]
 
---Creating frames
+--Creating frame
 local partyTargets = CreateFrame("Frame", addonNameSpace, UIParent) --Main addon frame
-local mainDisplay = CreateFrame("Frame", partyTargets:GetName() .. "MainDisplay", partyTargets, BackdropTemplateMixin and "BackdropTemplate")
-local mainDisplayText = mainDisplay:CreateFontString(mainDisplay:GetName() .. "Value", "OVERLAY")
 
 --Registering events
 partyTargets:RegisterEvent("ADDON_LOADED")
 partyTargets:RegisterEvent("PLAYER_ENTERING_WORLD")
-partyTargets:RegisterEvent("RAID_ROSTER_UPDATE")
+partyTargets:RegisterEvent("GROUP_ROSTER_UPDATE")
 
 --Event handler
 partyTargets:SetScript("OnEvent", function(self, event, ...)
 	return self[event] and self[event](self, ...)
 end)
-
---[ Tarfet Frames ]
-
-local targetFrames = {
-	[0] = {},
-	[1] = {},
-	[2] = {},
-	[3] = {},
-	[4] = {},
-	[5] = {},
-	[6] = {},
-	[7] = {},
-	[8] = {},
-	[9] = {},
-	[10] = {},
-	[11] = {},
-	[12] = {},
-	[13] = {},
-	[14] = {},
-	[15] = {},
-	[16] = {},
-	[17] = {},
-	[18] = {},
-	[19] = {},
-	[20] = {},
-	[21] = {},
-	[22] = {},
-	[23] = {},
-	[24] = {},
-	[25] = {},
-	[26] = {},
-	[27] = {},
-	[28] = {},
-	[29] = {},
-	[30] = {},
-	[31] = {},
-	[32] = {},
-	[33] = {},
-	[34] = {},
-	[35] = {},
-	[36] = {},
-	[37] = {},
-	[38] = {},
-}
 
 
 --[[ UTILITIES ]]
@@ -205,6 +317,74 @@ local function GetAnchorID(point)
 		end
 	end
 	return id
+end
+
+--[ Target Frames Management ]
+
+--Currently active group type ("party" | "raid")
+local groupType = "party"
+
+--Indexed table containing subtables with target frame and text references
+local targetFrames = {}
+
+---Create and add a new target Frame & FontString to the targetFrames table
+local function CreateTargetFrame()
+	--Create the subtable
+	local index = targetFrames[0] == nil and 0 or #targetFrames + 1
+	targetFrames[index] = {}
+	--Create the frame & text
+	targetFrames[index].frame = CreateFrame("Frame", partyTargets:GetName() .. "Display".. index + 1, partyTargets, BackdropTemplateMixin and "BackdropTemplate")
+	targetFrames[index].text = targetFrames[index].frame:CreateFontString(targetFrames[index].frame:GetName() .. "Text", "OVERLAY")
+	targetFrames[index].text:SetFont(fonts[0].path, 11, "THINOUTLINE")
+	--Position & dimensions
+	targetFrames[index].frame:SetSize(100, 16)
+	-- targetFrames[index].frame:SetPoint("TOPLEFT", UIParent, db.display.position[index].point, db.display.position[index].offset.x, db.display.position[index].offset.y)
+	targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. index + 1], "RIGHT", 0, 0)
+	targetFrames[index].text:SetPoint("LEFT")
+	--Making the frame moveable
+	-- targetFrames[index].frame:SetMovable(true)
+	-- targetFrames[index].frame:SetScript("OnMouseDown", function()
+	-- 	if IsShiftKeyDown() and not targetFrames[index].frame.isMoving then
+	-- 		targetFrames[index].frame:StartMoving()
+	-- 		targetFrames[index].frame.isMoving = true
+	-- 	end
+	-- end)
+	-- targetFrames[index].frame:SetScript("OnMouseUp", function()
+	-- 	if targetFrames[index].frame.isMoving then
+	-- 		targetFrames[index].frame:StopMovingOrSizing()
+	-- 		targetFrames[index].frame.isMoving = false
+	-- 	end
+	-- end)
+	--Start checking the target
+	targetFrames[index].frame:SetScript("OnUpdate", function()
+		local unitID = groupType .. index + 1 .. "target"
+		--Update target name
+		local max = UnitHealthMax(unitID)
+		targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(unitID) or ""))
+		--Update target healt bar
+		local healthPercentage = wt.FormatThousands(UnitHealth(unitID) / (max == 0 and 1 or max))
+	end)
+end
+
+local function UpdateFrames()
+	local members = GetNumGroupMembers()
+	if members > 0 then
+		local raidID = UnitInRaid("player")
+		groupType = raidID and "raid" or "party"
+		--Enable or create a target frames
+		for i = 0, members - 1 do
+			if targetFrames[i] == nil then CreateTargetFrame() else targetFrames[i].frame:Show() end
+			-- if i + 1 == raidID or 1 then targetFrames[i].frame:Hide() end
+		end
+		--Disable unneeded target frames
+		for i = members, #targetFrames do targetFrames[i].frame:Hide() end
+	else
+		--Disable all target frames
+		for i = 0, #targetFrames do
+			if targetFrames[i] == nil then break end
+			targetFrames[i].frame:Hide()
+		end
+	end
 end
 
 --[ DB Management ]
@@ -360,7 +540,7 @@ local function CreateOptionsShortcuts(parentFrame)
 		},
 		width = 120,
 		label = strings.options.advanced.title,
-		tooltip = strings.options.advanced.description:gsub("#ADDON", addon),
+		tooltip = { [0] = { text = strings.options.advanced.description:gsub("#ADDON", addon) }, },
 		onClick = function() InterfaceOptionsFrame_OpenToCategory(options.advancedOptionsPage) end,
 	})
 end
@@ -444,7 +624,7 @@ local function CreateAboutInfo(parentFrame)
 		fontObject = "GameFontDisableSmall",
 		text = ns.GetChangelog(),
 		label = strings.options.main.about.changelog.label,
-		tooltip = strings.options.main.about.changelog.tooltip,
+		tooltip = { [0] = { text = strings.options.main.about.changelog.tooltip }, },
 		scrollSpeed = 45,
 		readOnly = true,
 	})
@@ -578,7 +758,7 @@ local function CreateBackupOptions(parentFrame)
 				wt.CopyValues(t.account, db)
 				wt.CopyValues(t.character, dbc)
 				--Main display
-				SetDisplayValues(mainDisplay, mainDisplayText, db, dbc)
+				-- SetDisplayValues(mainDisplay, mainDisplayText, db, dbc)
 				--Update the interface options
 				wt.LoadOptionsData()
 			else print(Color(addon .. ":", colors.red[0]) .. " " .. Color(strings.options.advanced.backup.error, colors.blue[0])) end
@@ -596,12 +776,12 @@ local function CreateBackupOptions(parentFrame)
 		maxLetters = 5400,
 		fontObject = "GameFontWhiteSmall",
 		label = strings.options.advanced.backup.backupBox.label,
-		tooltip = strings.options.advanced.backup.backupBox.tooltip[0],
-		tooltipExtra = {
-			[0] = { text = strings.options.advanced.backup.backupBox.tooltip[1] },
-			[1] = { text = "\n" .. strings.options.advanced.backup.backupBox.tooltip[2]:gsub("#ENTER", strings.keys.enter) },
-			[2] = { text = strings.options.advanced.backup.backupBox.tooltip[3], color = { r = 0.89, g = 0.65, b = 0.40 } },
-			[3] = { text = "\n" .. strings.options.advanced.backup.backupBox.tooltip[4], color = { r = 0.92, g = 0.34, b = 0.23 } },
+		tooltip = {
+			[0] = { text = strings.options.advanced.backup.backupBox.tooltip[0] },
+			[1] = { text = strings.options.advanced.backup.backupBox.tooltip[1] },
+			[2] = { text = "\n" .. strings.options.advanced.backup.backupBox.tooltip[2]:gsub("#ENTER", strings.keys.enter) },
+			[3] = { text = strings.options.advanced.backup.backupBox.tooltip[3], color = { r = 0.89, g = 0.65, b = 0.40 } },
+			[4] = { text = "\n" .. strings.options.advanced.backup.backupBox.tooltip[4], color = { r = 0.92, g = 0.34, b = 0.23 } },
 		},
 		scrollSpeed = 60,
 		onEnterPressed = function() StaticPopup_Show(importPopup) end,
@@ -618,7 +798,7 @@ local function CreateBackupOptions(parentFrame)
 			offset = { x = -8, y = -13 }
 		},
 		label = strings.options.advanced.backup.compact.label,
-		tooltip = strings.options.advanced.backup.compact.tooltip,
+		tooltip = { [0] = { text = strings.options.advanced.backup.compact.tooltip }, },
 		onClick = function(self)
 			options.backup.string:SetText(wt.TableToString({ account = db, character = dbc }, self:GetChecked(), true))
 			--Set focus after text change to set the scroll to the top and refresh the position character counter
@@ -641,7 +821,7 @@ local function CreateBackupOptions(parentFrame)
 		},
 		width = 80,
 		label = strings.options.advanced.backup.load.label,
-		tooltip = strings.options.advanced.backup.load.tooltip,
+		tooltip = { [0] = { text = strings.options.advanced.backup.load.tooltip }, },
 		onClick = function() StaticPopup_Show(importPopup) end,
 	})
 	--Button: Reset
@@ -655,7 +835,7 @@ local function CreateBackupOptions(parentFrame)
 		},
 		width = 80,
 		label = strings.options.advanced.backup.reset.label,
-		tooltip = strings.options.advanced.backup.reset.tooltip,
+		tooltip = { [0] = { text = strings.options.advanced.backup.reset.tooltip }, },
 		onClick = function()
 			options.backup.string:SetText("") --Remove text to make sure OnTextChanged will get called
 			options.backup.string:SetText(wt.TableToString({ account = db, character = dbc }, options.backup.compact:GetChecked(), true))
@@ -856,36 +1036,22 @@ end
 local function SetUpMainDisplayFrame()
 	--Main frame
 	partyTargets:SetToplevel(true)
-	partyTargets:SetSize(114, 14)
-	wt.PositionFrame(partyTargets, db.display.position.point, nil, nil, db.display.position.offset.x, db.display.position.offset.y)
-	--Main display
-	mainDisplay:SetPoint("CENTER")
-	mainDisplayText:SetPoint("CENTER") --TODO: Add font offset option to fine-tune the position (AND/OR, ad pre-tested offsets to keep each font in the center)
-	SetDisplayValues(mainDisplay, mainDisplayText, db, dbc)
+	partyTargets:SetSize(16, 16)
+	partyTargets:SetPoint("TOPLEFT", 2, -2)
+	local logo = wt.CreateTexture({
+		parent = partyTargets,
+		name = "Icon",
+		path = textures.logo,
+		position = { anchor = "CENTER", },
+		size = { width = 16, height = 16 },
+	})
+	logo:SetAlpha(0.6)
 	--Context menu
 	wt.CreateContextMenu({
-		parent = mainDisplay,
+		parent = partyTargets,
 		menu = CreateContextMenuItems(),
 	})
 end
-
---Making the frame moveable
-partyTargets:SetMovable(true)
-mainDisplay:SetScript("OnMouseDown", function()
-	if IsShiftKeyDown() and not partyTargets.isMoving then
-		partyTargets:StartMoving()
-		partyTargets.isMoving = true
-	end
-end)
-mainDisplay:SetScript("OnMouseUp", function()
-	if partyTargets.isMoving then
-		partyTargets:StopMovingOrSizing()
-		partyTargets.isMoving = false
-	end
-	--Save the position (for account-wide use)
-	db.display.position.point, _, _, db.display.position.offset.x, db.display.position.offset.y = partyTargets:GetPoint()
-	PartyTargetsDB.display.position = wt.Clone(db.display.position) --Update in the SavedVariabes DB
-end)
 
 --[ Loading ]
 
@@ -904,34 +1070,14 @@ function partyTargets:PLAYER_ENTERING_WORLD()
 	SetUpMainDisplayFrame()
 	--Visibility notice
 	if not partyTargets:IsVisible() then PrintStatus(true) end
+	--Update target frames
+	UpdateFrames()
 end
 
 
 --[[ TARGET UPDATES ]]
 
---Add Target Frames
-function partyTargets:PLAYER_XP_UPDATE(unit)
-	local partyMembers = GetNumPartyMembers()
-	local raidMembers = GetNumRaidMembers()
-	local members = max(partyMembers, raidMembers)
-	if members > 0 then
-		local groupType = partyMembers > 0 and "party" or (raidMembers > 0 and "raid" or "")
-		for i = 1, members do
-			--Assign a target frame for this member
-			--TODO: work out and impelment how to work with target frames
-			--Start checking the target of this member
-			partyTargets:SetScript("OnUpdate", function()
-				mainDisplayText:SetText(UnitName(groupType .. i .. "target"))
-			end)
-		end
-	else
-		--Stop checking the targets of all party or raid members
-		partyTargets:SetScript("OnUpdate", nil)
-	end
+--Update target fames
+function partyTargets:GROUP_ROSTER_UPDATE()
+	UpdateFrames()
 end
-
---TESTING
-partyTargets:SetScript("OnUpdate", function()
-	if not UnitName("targettarget") then return end
-	mainDisplayText:SetText(UnitName("targettarget") .. " " .. UnitHealthMax("target") - UnitHealth("target"))
-end)
