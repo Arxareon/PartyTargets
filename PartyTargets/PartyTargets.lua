@@ -360,7 +360,7 @@ local function CreateTargetFrame()
 		local unitID = groupType .. index + 1 .. "target"
 		--Update target name
 		local max = UnitHealthMax(unitID)
-		targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(unitID) or ""))
+		targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(groupType .. index + 1) or "-") .. " " .. index + 1 .. " " .. (UnitName(unitID) or ""))
 		--Update target healt bar
 		local healthPercentage = wt.FormatThousands(UnitHealth(unitID) / (max == 0 and 1 or max))
 	end)
