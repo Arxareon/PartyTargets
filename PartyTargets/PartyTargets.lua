@@ -345,6 +345,7 @@ local function EnableTargetFrame(index)
 		--Find the true position
 		for i = 1, GetNumGroupMembers() do
 			print(UnitName(groupType .. index + 1), UnitName("player"))
+			print(_G["CompactRaidFrame" .. i .. "Name"]:GetText(), UnitName(groupType .. index + 1))
 			if (UnitName(groupType .. index + 1) or UnitName("player")) == UnitName("player") then
 				targetFrames[index].frame:Hide()
 				break
