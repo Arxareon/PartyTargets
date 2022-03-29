@@ -327,6 +327,37 @@ local groupType = "party"
 --Indexed table containing subtables with target frame and text references
 local targetFrames = {}
 
+--Update the target info displayed on a target frame
+local function UpdateTargetFrame(index)
+	local memberID = groupType .. index + 1
+	--Update name
+	local max = UnitHealthMax(memberID .. "target")
+	targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(memberID) or "-") .. " " .. index + 1 .. " " .. (UnitName(memberID) or ""))
+	--Update healt bar
+	local healthPercentage = wt.FormatThousands(UnitHealth(memberID .. "target") / (max == 0 and 1 or max))
+end
+
+--Show an already existing target frame & enable checking the targets
+local function EnableTargetFrame(index)
+	targetFrames[index].frame:Show()
+	targetFrames[index].frame:SetScript("OnUpdate", function()
+		UpdateTargetFrame(index)
+		--Find the true position
+		for i = 1, GetNumGroupMembers() do
+			print(UnitName(groupType .. index + 1), UnitName("player"))
+			if (UnitName(groupType .. index + 1) or UnitName("player")) == UnitName("player") then
+				targetFrames[index].frame:Hide()
+				break
+			elseif _G["CompactRaidFrame" .. i .. "Name"]:GetText() == UnitName(groupType .. index + 1) then
+				targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. i], "LEFT", 0, 0)
+				--Stop looking for the true position
+				targetFrames[index].frame:SetScript("OnUpdate", function() UpdateTargetFrame(index) end)
+				break
+			end
+		end
+	end)
+end
+
 ---Create and add a new target Frame & FontString to the targetFrames table
 local function CreateTargetFrame()
 	--Create the subtable
@@ -337,45 +368,36 @@ local function CreateTargetFrame()
 	targetFrames[index].text = targetFrames[index].frame:CreateFontString(targetFrames[index].frame:GetName() .. "Text", "OVERLAY")
 	targetFrames[index].text:SetFont(fonts[0].path, 11, "THINOUTLINE")
 	--Position & dimensions
-	targetFrames[index].frame:SetSize(100, 16)
-	-- targetFrames[index].frame:SetPoint("TOPLEFT", UIParent, db.display.position[index].point, db.display.position[index].offset.x, db.display.position[index].offset.y)
-	targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. index + 1], "RIGHT", 0, 0)
+	targetFrames[index].frame:SetSize(_G["CompactRaidFrame1"]:GetWidth(), 16)
+	targetFrames[index].frame:SetPoint("TOPLEFT", UIParent, db.display.position[index].point, db.display.position[index].offset.x, db.display.position[index].offset.y)
+	-- targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. index + 1], "LEFT", 0, 0)
 	targetFrames[index].text:SetPoint("LEFT")
 	--Making the frame moveable
-	-- targetFrames[index].frame:SetMovable(true)
-	-- targetFrames[index].frame:SetScript("OnMouseDown", function()
-	-- 	if IsShiftKeyDown() and not targetFrames[index].frame.isMoving then
-	-- 		targetFrames[index].frame:StartMoving()
-	-- 		targetFrames[index].frame.isMoving = true
-	-- 	end
-	-- end)
-	-- targetFrames[index].frame:SetScript("OnMouseUp", function()
-	-- 	if targetFrames[index].frame.isMoving then
-	-- 		targetFrames[index].frame:StopMovingOrSizing()
-	-- 		targetFrames[index].frame.isMoving = false
-	-- 	end
-	-- end)
-	--Start checking the target
-	targetFrames[index].frame:SetScript("OnUpdate", function()
-		local unitID = groupType .. index + 1 .. "target"
-		--Update target name
-		local max = UnitHealthMax(unitID)
-		targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(groupType .. index + 1) or "-") .. " " .. index + 1 .. " " .. (UnitName(unitID) or ""))
-		--Update target healt bar
-		local healthPercentage = wt.FormatThousands(UnitHealth(unitID) / (max == 0 and 1 or max))
+	targetFrames[index].frame:SetMovable(true)
+	targetFrames[index].frame:SetScript("OnMouseDown", function()
+		if IsShiftKeyDown() and not targetFrames[index].frame.isMoving then
+			targetFrames[index].frame:StartMoving()
+			targetFrames[index].frame.isMoving = true
+		end
 	end)
+	targetFrames[index].frame:SetScript("OnMouseUp", function()
+		if targetFrames[index].frame.isMoving then
+			targetFrames[index].frame:StopMovingOrSizing()
+			targetFrames[index].frame.isMoving = false
+		end
+	end)
+	--Start checking the targets
+	EnableTargetFrame(index)
 end
 
-local function UpdateFrames()
+--Update all target frames for the current group setup
+local function UpdateTargetFrames()
 	local members = GetNumGroupMembers()
 	if members > 0 then
 		local raidID = UnitInRaid("player")
 		groupType = raidID and "raid" or "party"
 		--Enable or create a target frames
-		for i = 0, members - 1 do
-			if targetFrames[i] == nil then CreateTargetFrame() else targetFrames[i].frame:Show() end
-			-- if i + 1 == raidID or 1 then targetFrames[i].frame:Hide() end
-		end
+		for i = 0, members - 1 do if targetFrames[i] == nil then CreateTargetFrame() else EnableTargetFrame(i) end end
 		--Disable unneeded target frames
 		for i = members, #targetFrames do targetFrames[i].frame:Hide() end
 	else
@@ -1071,7 +1093,7 @@ function partyTargets:PLAYER_ENTERING_WORLD()
 	--Visibility notice
 	if not partyTargets:IsVisible() then PrintStatus(true) end
 	--Update target frames
-	UpdateFrames()
+	UpdateTargetFrames()
 end
 
 
@@ -1079,5 +1101,5 @@ end
 
 --Update target fames
 function partyTargets:GROUP_ROSTER_UPDATE()
-	UpdateFrames()
+	UpdateTargetFrames()
 end
