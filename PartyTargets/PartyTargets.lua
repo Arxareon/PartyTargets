@@ -331,64 +331,62 @@ local targetFrames = {}
 local function UpdateTargetFrame(index)
 	local memberID = groupType .. index + 1
 	--Update name
-	local max = UnitHealthMax(memberID .. "target")
-	targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(memberID) or "-") .. " " .. index + 1 .. " " .. (UnitName(memberID) or ""))
+	targetFrames[index].text:SetText("|T" .. textures.logo .. ":0|t " .. (UnitName(memberID .. "target") or ""))
 	--Update healt bar
+	local max = UnitHealthMax(memberID .. "target")
 	local healthPercentage = wt.FormatThousands(UnitHealth(memberID .. "target") / (max == 0 and 1 or max))
 end
 
---Show an already existing target frame & enable checking the targets
+--Show an already existing target frame & enable target checking
 local function EnableTargetFrame(index)
 	targetFrames[index].frame:Show()
 	targetFrames[index].frame:SetScript("OnUpdate", function()
 		UpdateTargetFrame(index)
 		--Find the true position
-		for i = 1, GetNumGroupMembers() do
-			print(UnitName(groupType .. index + 1), UnitName("player"))
-			print(_G["CompactRaidFrame" .. i .. "Name"]:GetText(), UnitName(groupType .. index + 1))
-			if (UnitName(groupType .. index + 1) or UnitName("player")) == UnitName("player") then
-				targetFrames[index].frame:Hide()
-				break
-			elseif _G["CompactRaidFrame" .. i .. "Name"]:GetText() == UnitName(groupType .. index + 1) then
-				targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. i], "LEFT", 0, 0)
-				--Stop looking for the true position
-				targetFrames[index].frame:SetScript("OnUpdate", function() UpdateTargetFrame(index) end)
-				break
-			end
-		end
+		-- for i = 1, GetNumGroupMembers() do
+		-- 	if (UnitName(groupType .. index + 1) or "") == UnitName("player") then
+		-- 		targetFrames[index].frame:Hide()
+		-- 		break
+		-- 	-- elseif _G["CompactRaidFrame" .. i .. "Name"]:GetText() == UnitName(groupType .. index + 1) then
+		-- 	-- 	targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. i], "LEFT", 0, 0)
+		-- 	-- 	--Stop looking for the true position
+		-- 	-- 	targetFrames[index].frame:SetScript("OnUpdate", function() UpdateTargetFrame(index) end)
+		-- 	-- 	break
+		-- 	end
+		-- end
 	end)
 end
 
 ---Create and add a new target Frame & FontString to the targetFrames table
 local function CreateTargetFrame()
 	--Create the subtable
-	local index = targetFrames[0] == nil and 0 or #targetFrames + 1
-	targetFrames[index] = {}
+	local i = targetFrames[0] == nil and 0 or #targetFrames + 1
+	targetFrames[i] = {}
 	--Create the frame & text
-	targetFrames[index].frame = CreateFrame("Frame", partyTargets:GetName() .. "Display".. index + 1, partyTargets, BackdropTemplateMixin and "BackdropTemplate")
-	targetFrames[index].text = targetFrames[index].frame:CreateFontString(targetFrames[index].frame:GetName() .. "Text", "OVERLAY")
-	targetFrames[index].text:SetFont(fonts[0].path, 11, "THINOUTLINE")
+	targetFrames[i].frame = CreateFrame("Frame", partyTargets:GetName() .. "Display".. i + 1, partyTargets, BackdropTemplateMixin and "BackdropTemplate")
+	targetFrames[i].text = targetFrames[i].frame:CreateFontString(targetFrames[i].frame:GetName() .. "Text", "OVERLAY")
+	targetFrames[i].text:SetFont(fonts[0].path, 11, "THINOUTLINE")
 	--Position & dimensions
-	targetFrames[index].frame:SetSize(_G["CompactRaidFrame1"]:GetWidth(), 16)
-	targetFrames[index].frame:SetPoint("TOPLEFT", UIParent, db.display.position[index].point, db.display.position[index].offset.x, db.display.position[index].offset.y)
-	-- targetFrames[index].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. index + 1], "LEFT", 0, 0)
-	targetFrames[index].text:SetPoint("LEFT")
+	targetFrames[i].frame:SetSize(_G["CompactRaidFrame1"]:GetWidth(), 16)
+	-- targetFrames[i].frame:SetPoint("TOPLEFT", UIParent, db.display.position[i].point, db.display.position[i].offset.x, db.display.position[i].offset.y)
+	-- targetFrames[i].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. i + 1], "LEFT", 0, 0)
+	targetFrames[i].text:SetPoint("LEFT")
 	--Making the frame moveable
-	targetFrames[index].frame:SetMovable(true)
-	targetFrames[index].frame:SetScript("OnMouseDown", function()
-		if IsShiftKeyDown() and not targetFrames[index].frame.isMoving then
-			targetFrames[index].frame:StartMoving()
-			targetFrames[index].frame.isMoving = true
+	targetFrames[i].frame:SetMovable(true)
+	targetFrames[i].frame:SetScript("OnMouseDown", function()
+		if IsShiftKeyDown() and not targetFrames[i].frame.isMoving then
+			targetFrames[i].frame:StartMoving()
+			targetFrames[i].frame.isMoving = true
 		end
 	end)
-	targetFrames[index].frame:SetScript("OnMouseUp", function()
-		if targetFrames[index].frame.isMoving then
-			targetFrames[index].frame:StopMovingOrSizing()
-			targetFrames[index].frame.isMoving = false
+	targetFrames[i].frame:SetScript("OnMouseUp", function()
+		if targetFrames[i].frame.isMoving then
+			targetFrames[i].frame:StopMovingOrSizing()
+			targetFrames[i].frame.isMoving = false
 		end
 	end)
 	--Start checking the targets
-	EnableTargetFrame(index)
+	EnableTargetFrame(i)
 end
 
 --Update all target frames for the current group setup
@@ -397,8 +395,12 @@ local function UpdateTargetFrames()
 	if members > 0 then
 		local raidID = UnitInRaid("player")
 		groupType = raidID and "raid" or "party"
-		--Enable or create a target frames
-		for i = 0, members - 1 do if targetFrames[i] == nil then CreateTargetFrame() else EnableTargetFrame(i) end end
+		--Enable or create target frames
+		for i = 0, members - 1 do
+			if targetFrames[i] == nil then CreateTargetFrame() else EnableTargetFrame(i) end
+			--Update the position
+			targetFrames[i].frame:SetPoint("LEFT", _G["CompactRaidFrame" .. i + 1], "LEFT", 0, 0)
+		end
 		--Disable unneeded target frames
 		for i = members, #targetFrames do targetFrames[i].frame:Hide() end
 	else
@@ -1091,6 +1093,8 @@ end
 function partyTargets:PLAYER_ENTERING_WORLD()
 	--Set up the main frame & text
 	SetUpMainDisplayFrame()
+	--Set state
+	wt.SetVisibility(partyTargets, not dbc.disabled)
 	--Visibility notice
 	if not partyTargets:IsVisible() then PrintStatus(true) end
 	--Update target frames
