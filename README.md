@@ -18,8 +18,8 @@
 *Possibilities to directly support the development of Party Targets and other addons:*
 
 [![Donate on PayPal](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/124px-PayPal.svg.png)](https://www.paypal.com/donate/?hosted_button_id=Z4FSAFKA5LX98)
-- [**CurseForge**](https://www.curseforge.com/wow/addons/remaining-xp) • Should you prefer, support development by watching ads on CurseForge, and keep up to date via automatic updates via the CurseForge App.
-- [**Wago**](https://addons.wago.io/addons/remaining-xp) • You can also use Wago to get updates and support development by watching ads, and provide much appreciated continuous support via a Subscription.
+- [**CurseForge**](https://www.curseforge.com/wow/addons/party-targets-addon) • Should you prefer, support development by watching ads on CurseForge, and keep up to date via automatic updates via the CurseForge App.
+- [**Wago**](https://addons.wago.io/addons/party-targets) • You can also use Wago to get updates and support development by watching ads, and provide much appreciated continuous support via a Subscription.
 <br> *You can also get updates via **WoWUP** if you have Wago.io enabled as an addon provider!*
 
 ## License
