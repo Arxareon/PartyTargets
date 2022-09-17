@@ -1,14 +1,19 @@
---Addon name, namespace
-local addonNameSpace, ns = ...
-local _, addon = GetAddOnInfo(addonNameSpace)
+--[[ ADDON INFO ]]
 
---WidgetTools reference
-local wt = WidgetToolbox[ns.WidgetToolsVersion]
+--Addon namespace string & table
+local addonNameSpace, ns = ...
+
+--Addon display name
+local _, addonTitle = GetAddOnInfo(addonNameSpace)
+
+--Addon root folder
+local root = "Interface/AddOns/" .. addonNameSpace .. "/"
 
 
 --[[ ASSETS & RESOURCES ]]
 
-local root = "Interface/AddOns/" .. addonNameSpace .. "/"
+--WidgetTools reference
+local wt = WidgetToolbox[ns.WidgetToolsVersion]
 
 --Strings & Localization
 local strings = ns.LoadLocale()
@@ -559,43 +564,38 @@ local function CreateOptionsShortcuts(parentFrame)
 	--Button: Advanced page
 	wt.CreateButton({
 		parent = parentFrame,
+		name = "AdvancedPage",
+		title = strings.options.advanced.title,
+		tooltip = { [0] = { text = strings.options.advanced.description:gsub("#ADDON", addonTitle) }, },
 		position = {
 			anchor = "TOPRIGHT",
 			offset = { x = -10, y = -30 }
 		},
 		width = 120,
-		label = strings.options.advanced.title,
-		tooltip = { [0] = { text = strings.options.advanced.description:gsub("#ADDON", addon) }, },
 		onClick = function() InterfaceOptionsFrame_OpenToCategory(options.advancedOptionsPage) end,
 	})
 end
 local function CreateAboutInfo(parentFrame)
 	--Text: Version
 	local version = wt.CreateText({
-		frame = parentFrame,
+		parent = parentFrame,
 		name = "Version",
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -33 }
-		},
+		position = { offset = { x = 16, y = -33 } },
 		width = 84,
+		text = strings.options.main.about.version:gsub("#VERSION", WrapTextInColorCode(GetAddOnMetadata(addonNameSpace, "Version"), "FFFFFFFF")),
 		justify = "LEFT",
 		template = "GameFontNormalSmall",
-		text = strings.options.main.about.version:gsub("#VERSION", WrapTextInColorCode(GetAddOnMetadata(addonNameSpace, "Version"), "FFFFFFFF")),
 	})
 	--Text: Date
 	local date = wt.CreateText({
-		frame = parentFrame,
+		parent = parentFrame,
 		name = "Date",
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = version,
 			relativePoint = "TOPRIGHT",
-			offset = { x = 10, y = 0 }
+			offset = { x = 10, }
 		},
 		width = 102,
-		justify = "LEFT",
-		template = "GameFontNormalSmall",
 		text = strings.options.main.about.date:gsub(
 			"#DATE", WrapTextInColorCode(strings.misc.date:gsub(
 				"#DAY", GetAddOnMetadata(addonNameSpace, "X-Day")
@@ -605,53 +605,53 @@ local function CreateAboutInfo(parentFrame)
 				"#YEAR", GetAddOnMetadata(addonNameSpace, "X-Year")
 			), "FFFFFFFF")
 		),
+		template = "GameFontNormalSmall",
+		justify = "LEFT",
 	})
 	--Text: Author
 	local author = wt.CreateText({
-		frame = parentFrame,
+		parent = parentFrame,
 		name = "Author",
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = date,
 			relativePoint = "TOPRIGHT",
-			offset = { x = 10, y = 0 }
+			offset = { x = 10, }
 		},
 		width = 186,
-		justify = "LEFT",
-		template = "GameFontNormalSmall",
 		text = strings.options.main.about.author:gsub("#AUTHOR", WrapTextInColorCode(GetAddOnMetadata(addonNameSpace, "Author"), "FFFFFFFF")),
+		template = "GameFontNormalSmall",
+		justify = "LEFT",
 	})
 	--Text: License
 	wt.CreateText({
-		frame = parentFrame,
+		parent = parentFrame,
 		name = "License",
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = author,
 			relativePoint = "TOPRIGHT",
-			offset = { x = 10, y = 0 }
+			offset = { x = 10, }
 		},
 		width = 156,
-		justify = "LEFT",
-		template = "GameFontNormalSmall",
 		text = strings.options.main.about.license:gsub("#LICENSE", WrapTextInColorCode(GetAddOnMetadata(addonNameSpace, "X-License"), "FFFFFFFF")),
+		template = "GameFontNormalSmall",
+		justify = "LEFT",
 	})
 	--EditScrollBox: Changelog
 	options.about.changelog = wt.CreateEditScrollBox({
 		parent = parentFrame,
+		name = "Changelog",
+		title = strings.options.main.about.changelog.label,
+		tooltip = { [0] = { text = strings.options.main.about.changelog.tooltip }, },
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = version,
 			relativePoint = "BOTTOMLEFT",
-			offset = { x = 0, y = -12 }
+			offset = { y = -12 }
 		},
 		size = { width = parentFrame:GetWidth() - 32, height = 139 },
 		fontObject = "GameFontDisableSmall",
 		text = ns.GetChangelog(),
-		label = strings.options.main.about.changelog.label,
-		tooltip = { [0] = { text = strings.options.main.about.changelog.tooltip }, },
-		scrollSpeed = 45,
 		readOnly = true,
+		scrollSpeed = 45,
 	})
 end
 local function CreateSupportInfo(parentFrame)
@@ -659,60 +659,54 @@ local function CreateSupportInfo(parentFrame)
 	wt.CreateCopyBox({
 		parent = parentFrame,
 		name = "CurseForge",
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -33 }
-		},
+		title = strings.options.main.support.curseForge .. ":",
+		position = { offset = { x = 16, y = -33 } },
 		width = parentFrame:GetWidth() / 2 - 22,
+		text = "curseforge.com/wow/addons/party-targets",
 		template = "GameFontNormalSmall",
 		color = { r = 0.6, g = 0.8, b = 1, a = 1 },
-		text = "curseforge.com/wow/addons/party-targets",
-		label = strings.options.main.support.curseForge .. ":",
 		colorOnMouse = { r = 0.75, g = 0.95, b = 1, a = 1 },
 	})
 	--Copybox: Wago
 	wt.CreateCopyBox({
 		parent = parentFrame,
 		name = "Wago",
+		title = strings.options.main.support.wago .. ":",
 		position = {
 			anchor = "TOP",
 			offset = { x = (parentFrame:GetWidth() / 2 - 22) / 2 + 8, y = -33 }
 		},
 		width = parentFrame:GetWidth() / 2 - 22,
+		text = "addons.wago.io/addons/party-targets",
 		template = "GameFontNormalSmall",
 		color = { r = 0.6, g = 0.8, b = 1, a = 1 },
-		text = "addons.wago.io/addons/party-targets",
-		label = strings.options.main.support.wago .. ":",
 		colorOnMouse = { r = 0.75, g = 0.95, b = 1, a = 1 },
 	})
-	--Copybox: BitBucket
+	--Copybox: Repository
 	wt.CreateCopyBox({
 		parent = parentFrame,
-		name = "BitBucket",
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -70 }
-		},
+		name = "Repository",
+		label = strings.options.main.support.repository .. ":",
+		position = { offset = { x = 16, y = -70 } },
 		width = parentFrame:GetWidth() / 2 - 22,
+		text = "github.com/Arxareon/PartyTargets",
 		template = "GameFontNormalSmall",
 		color = { r = 0.6, g = 0.8, b = 1, a = 1 },
-		text = "bitbucket.org/Arxareon/party-targets",
-		label = strings.options.main.support.bitBucket .. ":",
 		colorOnMouse = { r = 0.75, g = 0.95, b = 1, a = 1 },
 	})
 	--Copybox: Issues
 	wt.CreateCopyBox({
 		parent = parentFrame,
 		name = "Issues",
+		title = strings.options.main.support.issues .. ":",
 		position = {
 			anchor = "TOP",
 			offset = { x = (parentFrame:GetWidth() / 2 - 22) / 2 + 8, y = -70 }
 		},
 		width = parentFrame:GetWidth() / 2 - 22,
+		text = "github.com/Arxareon/PartyTargets/issues",
 		template = "GameFontNormalSmall",
 		color = { r = 0.6, g = 0.8, b = 1, a = 1 },
-		text = "bitbucket.org/Arxareon/party-targets/issues",
-		label = strings.options.main.support.issues .. ":",
 		colorOnMouse = { r = 0.75, g = 0.95, b = 1, a = 1 },
 	})
 end
@@ -720,41 +714,39 @@ local function CreateMainCategoryPanels(parentFrame) --Add the main page widgets
 	--Shortcuts
 	local shortcutsPanel = wt.CreatePanel({
 		parent = parentFrame,
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -82 }
-		},
-		size = { height = 64 },
+		name = "Shortcuts",
 		title = strings.options.main.shortcuts.title,
-		description = strings.options.main.shortcuts.description:gsub("#ADDON", addon),
+		description = strings.options.main.shortcuts.description:gsub("#ADDON", addonTitle),
+		position = { offset = { x = 16, y = -82 } },
+		size = { height = 64 },
 	})
 	CreateOptionsShortcuts(shortcutsPanel)
 	--About
 	local aboutPanel = wt.CreatePanel({
 		parent = parentFrame,
+		name = "About",
+		title = strings.options.main.about.title,
+		description = strings.options.main.about.description:gsub("#ADDON", addonTitle),
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = shortcutsPanel,
 			relativePoint = "BOTTOMLEFT",
-			offset = { x = 0, y = -32 }
+			offset = { y = -32 }
 		},
 		size = { height = 231 },
-		title = strings.options.main.about.title,
-		description = strings.options.main.about.description:gsub("#ADDON", addon),
 	})
 	CreateAboutInfo(aboutPanel)
 	--Support
 	local supportPanel = wt.CreatePanel({
 		parent = parentFrame,
+		name = "Support",
+		title = strings.options.main.support.title,
+		description = strings.options.main.support.description:gsub("#ADDON", addonTitle),
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = aboutPanel,
 			relativePoint = "BOTTOMLEFT",
-			offset = { x = 0, y = -32 }
+			offset = { y = -32 }
 		},
 		size = { height = 111 },
-		title = strings.options.main.support.title,
-		description = strings.options.main.support.description:gsub("#ADDON", addon),
 	})
 	CreateSupportInfo(supportPanel)
 end
@@ -765,7 +757,8 @@ local function CreateOptionsProfiles(parentFrame)
 end
 local function CreateBackupOptions(parentFrame)
 	--EditScrollBox & Popup: Import & Export
-	local importPopup = wt.CreatePopup(addonNameSpace, {
+	local importPopup = wt.CreatePopup({
+		addon = addonNameSpace,
 		name = "IMPORT",
 		text = strings.options.advanced.backup.warning,
 		accept = strings.options.advanced.backup.import,
@@ -785,22 +778,15 @@ local function CreateBackupOptions(parentFrame)
 				--Main display
 				-- SetDisplayValues(mainDisplay, mainDisplayText, db, dbc)
 				--Update the interface options
-				wt.LoadOptionsData()
-			else print(Color(addon .. ":", colors.red[0]) .. " " .. Color(strings.options.advanced.backup.error, colors.blue[0])) end
+				wt.LoadOptionsData(addonNameSpace)
+			else print(Color(addonTitle .. ":", colors.red[0]) .. " " .. Color(strings.options.advanced.backup.error, colors.blue[0])) end
 		end
 	})
 	local backupBox
 	options.backup.string, backupBox = wt.CreateEditScrollBox({
 		parent = parentFrame,
 		name = "ImportExport",
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -30 }
-		},
-		size = { width = parentFrame:GetWidth() - 32, height = 276 },
-		maxLetters = 5400,
-		fontObject = "GameFontWhiteSmall",
-		label = strings.options.advanced.backup.backupBox.label,
+		title = strings.options.advanced.backup.backupBox.label,
 		tooltip = {
 			[0] = { text = strings.options.advanced.backup.backupBox.tooltip[0] },
 			[1] = { text = strings.options.advanced.backup.backupBox.tooltip[1] },
@@ -808,22 +794,29 @@ local function CreateBackupOptions(parentFrame)
 			[3] = { text = strings.options.advanced.backup.backupBox.tooltip[3], color = { r = 0.89, g = 0.65, b = 0.40 } },
 			[4] = { text = "\n" .. strings.options.advanced.backup.backupBox.tooltip[4], color = { r = 0.92, g = 0.34, b = 0.23 } },
 		},
+		position = { offset = { x = 16, y = -30 } },
+		size = { width = parentFrame:GetWidth() - 32, height = 276 },
+		maxLetters = 5400,
+		fontObject = "GameFontWhiteSmall",
 		scrollSpeed = 60,
 		onEnterPressed = function() StaticPopup_Show(importPopup) end,
 		onEscapePressed = function(self) self:SetText(wt.TableToString({ account = db, character = dbc }, options.backup.compact:GetChecked(), true)) end,
-		onLoad = function(self) self:SetText(wt.TableToString({ account = db, character = dbc }, options.backup.compact:GetChecked(), true)) end,
+		optionsData = {
+			optionsKey = addonNameSpace,
+			onLoad = function(self) self:SetText(wt.TableToString({ account = db, character = dbc }, options.backup.compact:GetChecked(), true)) end,
+		}
 	})
 	--Checkbox: Compact
 	options.backup.compact = wt.CreateCheckbox({
 		parent = parentFrame,
+		name = "Compact",
+		title = strings.options.advanced.backup.compact.label,
+		tooltip = { [0] = { text = strings.options.advanced.backup.compact.tooltip }, },
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = backupBox,
 			relativePoint = "BOTTOMLEFT",
 			offset = { x = -8, y = -13 }
 		},
-		label = strings.options.advanced.backup.compact.label,
-		tooltip = { [0] = { text = strings.options.advanced.backup.compact.tooltip }, },
 		onClick = function(self)
 			options.backup.string:SetText(wt.TableToString({ account = db, character = dbc }, self:GetChecked(), true))
 			--Set focus after text change to set the scroll to the top and refresh the position character counter
@@ -831,13 +824,17 @@ local function CreateBackupOptions(parentFrame)
 			options.backup.string:ClearFocus()
 		end,
 		optionsData = {
+			optionsKey = addonNameSpace,
 			storageTable = cs,
-			key = "compactBackup",
+			storageKey = "compactBackup",
 		},
 	})
 	--Button: Load
 	local load = wt.CreateButton({
 		parent = parentFrame,
+		name = "Load",
+		title = strings.options.advanced.backup.load.label,
+		tooltip = { [0] = { text = strings.options.advanced.backup.load.tooltip }, },
 		position = {
 			anchor = "TOPRIGHT",
 			relativeTo = backupBox,
@@ -845,22 +842,21 @@ local function CreateBackupOptions(parentFrame)
 			offset = { x = 6, y = -13 }
 		},
 		width = 80,
-		label = strings.options.advanced.backup.load.label,
-		tooltip = { [0] = { text = strings.options.advanced.backup.load.tooltip }, },
 		onClick = function() StaticPopup_Show(importPopup) end,
 	})
 	--Button: Reset
 	wt.CreateButton({
 		parent = parentFrame,
+		name = "Reset",
+		title = strings.options.advanced.backup.reset.label,
+		tooltip = { [0] = { text = strings.options.advanced.backup.reset.tooltip }, },
 		position = {
 			anchor = "TOPRIGHT",
 			relativeTo = load,
 			relativePoint = "TOPLEFT",
-			offset = { x = -10, y = 0 }
+			offset = { x = -10, }
 		},
 		width = 80,
-		label = strings.options.advanced.backup.reset.label,
-		tooltip = { [0] = { text = strings.options.advanced.backup.reset.tooltip }, },
 		onClick = function()
 			options.backup.string:SetText("") --Remove text to make sure OnTextChanged will get called
 			options.backup.string:SetText(wt.TableToString({ account = db, character = dbc }, options.backup.compact:GetChecked(), true))
@@ -874,27 +870,25 @@ local function CreateAdvancedCategoryPanels(parentFrame) --Add the advanced page
 	--Profiles
 	local profilesPanel = wt.CreatePanel({
 		parent = parentFrame,
-		position = {
-			anchor = "TOPLEFT",
-			offset = { x = 16, y = -82 }
-		},
-		size = { height = 64 },
+		name = "Profiles",
 		title = strings.options.advanced.profiles.title,
-		description = strings.options.advanced.profiles.description:gsub("#ADDON", addon),
+		description = strings.options.advanced.profiles.description:gsub("#ADDON", addonTitle),
+		position = { offset = { x = 16, y = -82 } },
+		size = { height = 64 },
 	})
 	CreateOptionsProfiles(profilesPanel)
 	---Backup
 	local backupOptions = wt.CreatePanel({
 		parent = parentFrame,
+		name = "Backup",
+		title = strings.options.advanced.backup.title,
+		description = strings.options.advanced.backup.description:gsub("#ADDON", addonTitle),
 		position = {
-			anchor = "TOPLEFT",
 			relativeTo = profilesPanel,
 			relativePoint = "BOTTOMLEFT",
-			offset = { x = 0, y = -32 }
+			offset = { y = -32 }
 		},
 		size = { height = 374 },
-		title = strings.options.advanced.backup.title,
-		description = strings.options.advanced.backup.description:gsub("#ADDON", addon),
 	})
 	CreateBackupOptions(backupOptions)
 end
@@ -919,35 +913,35 @@ local function DefaultOptions()
 	wt.CopyValues(dbDefault, db)
 	wt.CopyValues(dbcDefault, dbc)
 	--Update the interface options
-	wt.LoadOptionsData()
+	wt.LoadOptionsData(addonNameSpace)
 	--Notification
-	print(Color(addon .. ":", colors.red[0]) .. " " .. Color(strings.options.defaults, colors.blue[0]))
+	print(Color(addonTitle .. ":", colors.red[0]) .. " " .. Color(strings.options.defaults, colors.blue[0]))
 end
 
 --Create and add the options category panel frames to the WoW Interface Options
 local function LoadInterfaceOptions()
 	--Main options panel
 	options.mainOptionsPage = wt.CreateOptionsPanel({
-		name = addonNameSpace .. "Main",
-		title = addon,
-		description = strings.options.main.description:gsub("#ADDON", addon):gsub("#KEYWORD", strings.chat.keyword),
+		addon = addonNameSpace,
+		name = "Main",
+		description = strings.options.main.description:gsub("#ADDON", addonTitle):gsub("#KEYWORD", strings.chat.keyword),
 		logo = textures.logo,
 		titleLogo = true,
 		okay = SaveOptions,
 		cancel = CancelChanges,
 		default = DefaultOptions,
+		optionsKey = addonNameSpace,
 	})
 	CreateMainCategoryPanels(options.mainOptionsPage) --Add categories & GUI elements to the panel
 	--Advanced options panel
 	options.advancedOptionsPage = wt.CreateOptionsPanel({
 		parent = options.mainOptionsPage.name,
-		name = addonNameSpace .. "Advanced",
+		addon = addonNameSpace,
+		name = "Advanced",
 		title = strings.options.advanced.title,
-		description = strings.options.advanced.description:gsub("#ADDON", addon),
+		description = strings.options.advanced.description:gsub("#ADDON", addonTitle),
 		logo = textures.logo,
 		default = DefaultOptions,
-		autoSave = false,
-		autoLoad = false,
 	})
 	CreateAdvancedCategoryPanels(options.advancedOptionsPage) --Add categories & GUI elements to the panel
 end
@@ -962,30 +956,30 @@ end
 local function PrintStatus(load)
 	if load == true and not db.statusNotice then return end
 	print(Color(partyTargets:IsVisible() and strings.chat.status.enabled:gsub(
-		"#ADDON", Color(addon, colors.red[0])
+		"#ADDON", Color(addonTitle, colors.red[0])
 	) or strings.chat.status.disabled:gsub(
-		"#ADDON", Color(addon, colors.red[0])
+		"#ADDON", Color(addonTitle, colors.red[0])
 	), colors.blue[0]))
 end
 --Print help info
 local function PrintInfo()
-	print(Color(strings.chat.help.thanks:gsub("#ADDON", Color(addon, colors.red[0])), colors.blue[0]))
+	print(Color(strings.chat.help.thanks:gsub("#ADDON", Color(addonTitle, colors.red[0])), colors.blue[0]))
 	PrintStatus()
 	print(Color(strings.chat.help.hint:gsub( "#HELP_COMMAND", Color(strings.chat.keyword .. " " .. strings.chat.help.command, colors.red[1])), colors.blue[1]))
-	print(Color(strings.chat.help.move:gsub("#SHIFT", Color(strings.keys.shift, colors.red[1])):gsub("#ADDON", addon), colors.blue[1]))
+	print(Color(strings.chat.help.move:gsub("#SHIFT", Color(strings.keys.shift, colors.red[1])):gsub("#ADDON", addonTitle), colors.blue[1]))
 end
 --Print the command list with basic functionality info
 local function PrintCommands()
-	print(Color(addon, colors.red[0]) .. " ".. Color(strings.chat.help.list .. ":", colors.blue[0]))
+	print(Color(addonTitle, colors.red[0]) .. " ".. Color(strings.chat.help.list .. ":", colors.blue[0]))
 	--Index the commands (skipping the help command) and put replacement code segments in place
 	local commands = {
 		[0] = {
 			command = strings.chat.options.command,
-			description = strings.chat.options.description:gsub("#ADDON", addon)
+			description = strings.chat.options.description:gsub("#ADDON", addonTitle)
 		},
 		[1] = {
 			command = strings.chat.toggle.command,
-			description = strings.chat.toggle.description:gsub("#ADDON", addon):gsub(
+			description = strings.chat.toggle.description:gsub("#ADDON", addonTitle):gsub(
 				"#STATE", Color(dbc.disabled and strings.misc.disabled or strings.misc.enabled, colors.red[1])
 			)
 		},
@@ -1003,9 +997,9 @@ local function ToggleCommand()
 	wt.SetVisibility(partyTargets, not dbc.disabled)
 	--Response
 	print(Color(dbc.disabled and strings.chat.toggle.disabled:gsub(
-			"#ADDON", Color(addon, colors.red[0])
+			"#ADDON", Color(addonTitle, colors.red[0])
 		) or strings.chat.toggle.enabled:gsub(
-			"#ADDON", Color(addon, colors.red[0])
+			"#ADDON", Color(addonTitle, colors.red[0])
 		), colors.blue[0]))
 	--Update in the SavedVariabes DB
 	PartyTargetsDBC.disabled = dbc.disabled
@@ -1032,7 +1026,7 @@ end
 local function CreateContextMenuItems()
 	return {
 		{
-			text = strings.options.name:gsub("#ADDON", addon),
+			text = strings.options.name:gsub("#ADDON", addonTitle),
 			isTitle = true,
 			notCheckable = true,
 		},

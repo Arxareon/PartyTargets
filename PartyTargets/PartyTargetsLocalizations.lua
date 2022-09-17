@@ -6,7 +6,7 @@ local _, ns = ...
 
 local changelogDB = {
 	[0] = {
-		[0] = "#V_Version 1.0_# #H_(3/18/2022)_#",
+		[0] = "#V_Version 1.0_# #H_(9/2/2022)_#",
 		[1] = "#H_It's alive!_#",
 	},
 }
@@ -72,7 +72,7 @@ local english = {
 				description = "Follow the links to see how you can provide feedback, report bugs, get help and support development.",
 				curseForge = "CurseForge Page",
 				wago = "Wago Page",
-				bitBucket = "BitBucket Repository",
+				repository = "GitHub Repository",
 				issues = "Issues & Ideas",
 			},
 			feedback = {
